@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import catboost as cs
 laboratory_work_list = []
 laboratory_work = ("удовлетворительно", "хорошо", "отлично")
 grant = np.random.randint(0, 100, (2000, 6))
