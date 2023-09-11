@@ -18,7 +18,7 @@ student_scores.to_csv('test.csv', index = False)
 student_scores = pd.read_csv('test.csv')
 
 # Преобразуем категориальные признаки в числовые с помощью Label Encoding
-cat_features = ['laboratory_work']
+cat_features = ['subject1', 'subject2', 'subject3']
 for feature in cat_features:
     student_scores[feature] = student_scores[feature].astype('category')
 
@@ -28,7 +28,7 @@ y = student_scores['laboratory_work']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Обучаем модель CatBoostClassifier
-model = CatBoostClassifier(iterations=100, depth=4, learning_rate=0.1, cat_features=cat_features)
+model = CatBoostClassifier(iterations=500, depth=4, learning_rate=0.1, cat_features=cat_features)
 model.fit(X_train, y_train)
 
 # Делаем предсказания на тестовом наборе
