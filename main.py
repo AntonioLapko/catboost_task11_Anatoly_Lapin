@@ -46,6 +46,27 @@ y_pred = model.predict(X_test)
 accuracy = accuracy_score(y_test, y_pred)
 print(f"Точность модели: {accuracy}")
 
+#Сохраняем модель в файл
+model.save_model('student_score.cbm')
+
+# Функция для прогноза оценки итоговой лабораторной работы
+def forecast_score(new_flat, model_filename='flat_model.cbm'):
+    # Чтение обученной модели из файла
+    model = CatBoostClassifier()
+    model.load_model(model_filename)
+
+    # Преобразование данных новой квартиры в DataFrame
+    new_data = pd.DataFrame([new_flat])
+
+    # Использование модели для предсказания
+    predicted_category = model.predict(new_data)[0]
+
+    # Преобразование обратно в текстовую категорию
+    categories = ['стандарт', 'улучшенный']
+    predicted_category = categories[predicted_category]
+
+    return predicted_category
+
 def forecast_score (subject1, subject2, subject3, subject4, subject5, subject6):
 
   return f"Точность модели: {accuracy}"
