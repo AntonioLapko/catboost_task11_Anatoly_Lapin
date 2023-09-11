@@ -8,4 +8,3 @@ for i in range (2000): laboratory_work_list.insert (i, np.random.choice(laborato
 student_scores['laboratory_work'] = laboratory_work_list
 print(student_scores)
 
-print(laboratory_work)
