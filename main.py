@@ -21,7 +21,7 @@ for i in range (2500):
 student_scores['laboratory_work'] = laboratory_work_list
 student_scores.to_csv('test.csv', index=False)
 
-# Загружаем данные из файла data.csv
+# Загружаем данные из файла test.csv
 student_scores = pd.read_csv('test.csv')
 
 # Преобразуем категориальные признаки в числовые
@@ -51,6 +51,7 @@ model.save_model('student_score.cbm')
 # Функция для прогноза оценки итоговой лабораторной работы
 
 def forecast_score (sub1, sub2, sub3, sub4, sub5, sub6):
+    model.load_model('student_score.cbm')
     new_students_score = pd.DataFrame({'subject1': [sub1], 'subject2': [sub2], 'subject3': [sub3], 'subject4': [sub4], 'subject5': [sub5], 'subject6': [sub6]})
     new_students_score = new_students_score.astype('int')
     forecast = model.predict(new_students_score)[0]
