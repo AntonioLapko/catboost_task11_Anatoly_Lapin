@@ -4,29 +4,28 @@ from catboost import CatBoostClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
-# Генерируем тестовые данные и сохраняем их в файл data.csv
+# Генерируем тестовые данные и сохраняем их в файл test.csv
 
 laboratory_work_list = []
-laboratory_work = ("удовлетворительно", "хорошо", "отлично")
+laboratory_work = ("неудовлетворительно", "удовлетворительно", "хорошо", "отлично")
 grant = np.random.randint(0, 100, (2500, 6))
 student_scores = pd.DataFrame (grant, columns = ['subject1', 'subject2', 'subject3', 'subject4', 'subject5', 'subject6'])
 #for i in range (2000): laboratory_work_list.insert (i, np.random.choice(laboratory_work))
 student_scores_avg = pd.DataFrame(student_scores.mean(axis=1))
 a = student_scores_avg.to_numpy()
 for i in range (2500):
-    if a[i] >= 70: laboratory_work_list.insert (i, laboratory_work[2])
-    if a[i] < 70 and a[i] >= 50: laboratory_work_list.insert (i, laboratory_work[1])
-    if a[i] < 50 and a[i] >= 30: laboratory_work_list.insert (i, laboratory_work [0])
-    if a[i] < 30: laboratory_work_list.insert (i, " ")
+    if a[i] >= 70: laboratory_work_list.insert (i, laboratory_work[3])
+    if a[i] < 70 and a[i] >= 50: laboratory_work_list.insert (i, laboratory_work[2])
+    if a[i] < 50 and a[i] >= 30: laboratory_work_list.insert (i, laboratory_work [1])
+    if a[i] < 30: laboratory_work_list.insert (i, laboratory_work [0])
 student_scores['laboratory_work'] = laboratory_work_list
-student_scores = student_scores.dropna()
 student_scores.to_csv('test.csv', index=False)
 
 # Загружаем данные из файла data.csv
 student_scores = pd.read_csv('test.csv')
 
-# Преобразуем категориальные признаки в числовые с помощью Label Encoding
-cat_features = ['subject1', 'subject2', 'subject3']
+# Преобразуем категориальные признаки в числовые
+cat_features = ['subject1', 'subject3', 'subject5']
 for feature in cat_features:
     student_scores[feature] = student_scores[feature].astype('category')
 
@@ -50,28 +49,14 @@ print(f"Точность модели: {accuracy}")
 model.save_model('student_score.cbm')
 
 # Функция для прогноза оценки итоговой лабораторной работы
-def forecast_score(new_flat, model_filename='flat_model.cbm'):
-    # Чтение обученной модели из файла
-    model = CatBoostClassifier()
-    model.load_model(model_filename)
 
-    # Преобразование данных новой квартиры в DataFrame
-    new_data = pd.DataFrame([new_flat])
-
-    # Использование модели для предсказания
-    predicted_category = model.predict(new_data)[0]
-
-    # Преобразование обратно в текстовую категорию
-    categories = ['стандарт', 'улучшенный']
-    predicted_category = categories[predicted_category]
-
-    return predicted_category
-
-def forecast_score (subject1, subject2, subject3, subject4, subject5, subject6):
-
-  return f"Точность модели: {accuracy}"
+def forecast_score (sub1, sub2, sub3, sub4, sub5, sub6):
+    new_students_score = pd.DataFrame({'subject1': [sub1], 'subject2': [sub2], 'subject3': [sub3], 'subject4': [sub4], 'subject5': [sub5], 'subject6': [sub6]})
+    new_students_score = new_students_score.astype('int')
+    forecast = model.predict(new_students_score)[0]
+    return print(f"Прогноз итоговой оценки: {forecast}")
 
 #Необходимо указать оценки студента (от 0 до 99) по 6 предметам
-#forecast_score (10, 20, 30, 40, 50, 60)
+forecast_score (50, 60, 70, 40, 50, 60)
 
 
